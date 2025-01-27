@@ -1,0 +1,114 @@
+{
+    "models": [
+        {
+            "classname": "User",
+            "code": "class User(db.Model):\n    __tablename__ = 'user'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    username = Column(String)\n    email = Column(String)\n    password = Column(String)\n    date_joined = Column(DateTime)",
+            "description": "Handles user account data",
+            "name": "User Model"
+        },
+        {
+            "classname": "Profile",
+            "code": "class Profile(db.Model):\n    __tablename__ = 'profile'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    user_id = Column(Integer, ForeignKey('user.id'))\n    bio = Column(String)\n    website = Column(String)\n    location = Column(String)",
+            "description": "Contains additional user profile information",
+            "name": "Profile Model"
+        },
+        {
+            "classname": "Post",
+            "code": "class Post(db.Model):\n    __tablename__ = 'post'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    user_id = Column(Integer, ForeignKey('user.id'))\n    title = Column(String)\n    content = Column(Text)\n    created_at = Column(DateTime)\n    updated_at = Column(DateTime)",
+            "description": "Stores blog or content posts",
+            "name": "Post Model"
+        },
+        {
+            "classname": "Comment",
+            "code": "class Comment(db.Model):\n    __tablename__ = 'comment'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    post_id = Column(Integer, ForeignKey('post.id'))\n    user_id = Column(Integer, ForeignKey('user.id'))\n    content = Column(Text)\n    created_at = Column(DateTime)",
+            "description": "Contains comments on posts",
+            "name": "Comment Model"
+        },
+        {
+            "classname": "Category",
+            "code": "class Category(db.Model):\n    __tablename__ = 'category'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String)\n    description = Column(String)",
+            "description": "Represents categories for posts",
+            "name": "Category Model"
+        },
+        {
+            "classname": "PostCategory",
+            "code": "class PostCategory(db.Model):\n    __tablename__ = 'post_category'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    post_id = Column(Integer, ForeignKey('post.id'))\n    category_id = Column(Integer, ForeignKey('category.id'))",
+            "description": "Associates posts with categories",
+            "name": "PostCategory Model"
+        },
+        {
+            "classname": "Tag",
+            "code": "class Tag(db.Model):\n    __tablename__ = 'tag'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String)",
+            "description": "Represents tags that can be applied to posts",
+            "name": "Tag Model"
+        },
+        {
+            "classname": "PostTag",
+            "code": "class PostTag(db.Model):\n    __tablename__ = 'post_tag'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    post_id = Column(Integer, ForeignKey('post.id'))\n    tag_id = Column(Integer, ForeignKey('tag.id'))",
+            "description": "Associates posts with tags",
+            "name": "PostTag Model"
+        },
+        {
+            "classname": "Like",
+            "code": "class Like(db.Model):\n    __tablename__ = 'like'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    user_id = Column(Integer, ForeignKey('user.id'))\n    post_id = Column(Integer, ForeignKey('post.id'))",
+            "description": "Stores likes/endorsements for posts",
+            "name": "Like Model"
+        },
+        {
+            "classname": "Image",
+            "code": "class Image(db.Model):\n    __tablename__ = 'image'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    post_id = Column(Integer, ForeignKey('post.id'))\n    url = Column(String)\n    description = Column(String)",
+            "description": "Stores images associated with posts",
+            "name": "Image Model"
+        },
+        {
+            "classname": "Notification",
+            "code": "class Notification(db.Model):\n    __tablename__ = 'notification'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    user_id = Column(Integer, ForeignKey('user.id'))\n    message = Column(String)\n    created_at = Column(DateTime)",
+            "description": "Represents notifications for users",
+            "name": "Notification Model"
+        },
+        {
+            "classname": "Message",
+            "code": "class Message(db.Model):\n    __tablename__ = 'message'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    sender_id = Column(Integer, ForeignKey('user.id'))\n    receiver_id = Column(Integer, ForeignKey('user.id'))\n    content = Column(Text)\n    sent_at = Column(DateTime)",
+            "description": "Handles messages between users",
+            "name": "Message Model"
+        }
+    ],
+    "rules": [],
+    "test_data": "Test data examples for the given classes",
+    "test_data_rows": [
+        {
+            "test_data_row_variable": "user1",
+            "code": "user1 = User(username=\"johndoe\", email=\"johndoe@example.com\", password=\"Johndoe123\", date_joined=date(2022, 1, 20))"
+        },
+        {
+            "test_data_row_variable": "user2",
+            "code": "user2 = User(username=\"janedoe\", email=\"janedoe@example.com\", password=\"Janedoe123\", date_joined=date(2022, 2, 15))"
+        },
+        {
+            "test_data_row_variable": "profile1",
+            "code": "profile1 = Profile(user_id=1, bio=\"Software Developer\", website=\"http://johndoesite.com\", location=\"New York\")"
+        },
+        {
+            "test_data_row_variable": "profile2",
+            "code": "profile2 = Profile(user_id=2, bio=\"Graphic Designer\", website=\"http://janedoesite.com\", location=\"Los Angeles\")"
+        },
+        {
+            "test_data_row_variable": "post1",
+            "code": "post1 = Post(user_id=1, title=\"My First Post\", content=\"This is the body of my first post.\", created_at=date(2022, 3, 1), updated_at=date(2022, 3, 1))"
+        },
+        {
+            "test_data_row_variable": "post2",
+            "code": "post2 = Post(user_id=2, title=\"Welcome to My Blog\", content=\"I'm excited to start this new journey.\", created_at=date(2022, 3, 5), updated_at=date(2022, 3, 6))"
+        },
+        {
+            "test_data_row_variable": "comment1",
+            "code": "comment1 = Comment(post_id=1, user_id=2, content=\"Great post!\", created_at=date(2022, 3, 2))"
+        },
+        {
+            "test_data_row_variable": "comment2",
+            "code": "comment2 = Comment(post_id=2, user_id=1, content=\"Thank you!\", created_at=date(2022, 3, 6))"
+        }
+    ],
+    "test_data_sqlite": "",
+    "name": "WebsiteDBMain"
+}

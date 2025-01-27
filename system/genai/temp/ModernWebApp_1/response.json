@@ -1,0 +1,274 @@
+{
+    "models": [
+        {
+            "classname": "User",
+            "code": "class User(Base):\n    __tablename__ = \"user\"\n\n    id = Column(Integer, primary_key=True)\n    username = Column(String)\n    email = Column(String)\n    password = Column(String)\n    date_joined = Column(DateTime)",
+            "description": "Represents a user in the system.",
+            "name": "User"
+        },
+        {
+            "classname": "Profile",
+            "code": "class Profile(Base):\n    __tablename__ = \"profile\"\n\n    id = Column(Integer, primary_key=True)\n    user_id = Column(Integer, ForeignKey(\"user.id\"))\n    first_name = Column(String)\n    last_name = Column(String)\n    bio = Column(String)\n    profile_pic_url = Column(String)",
+            "description": "Holds additional information about a user.",
+            "name": "Profile"
+        },
+        {
+            "classname": "Category",
+            "code": "class Category(Base):\n    __tablename__ = \"category\"\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String)\n    description = Column(String)",
+            "description": "Categories for organizing content on the website.",
+            "name": "Category"
+        },
+        {
+            "classname": "Template",
+            "code": "class Template(Base):\n    __tablename__ = \"template\"\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String)\n    html = Column(String)\n    css = Column(String)\n    js = Column(String)",
+            "description": "Represents a website template including HTML, CSS, and JS code.",
+            "name": "Template"
+        },
+        {
+            "classname": "Page",
+            "code": "class Page(Base):\n    __tablename__ = \"page\"\n\n    id = Column(Integer, primary_key=True)\n    title = Column(String)\n    content = Column(String)\n    created_at = Column(DateTime)\n    updated_at = Column(DateTime)",
+            "description": "Website pages content storage.",
+            "name": "Page"
+        },
+        {
+            "classname": "Post",
+            "code": "class Post(Base):\n    __tablename__ = \"post\"\n\n    id = Column(Integer, primary_key=True)\n    title = Column(String)\n    content = Column(String)\n    author_id = Column(Integer, ForeignKey(\"user.id\"))\n    created_at = Column(DateTime)",
+            "description": "Blog posts or articles published by users.",
+            "name": "Post"
+        },
+        {
+            "classname": "Comment",
+            "code": "class Comment(Base):\n    __tablename__ = \"comment\"\n\n    id = Column(Integer, primary_key=True)\n    content = Column(String)\n    post_id = Column(Integer, ForeignKey(\"post.id\"))\n    author_id = Column(Integer, ForeignKey(\"user.id\"))\n    created_at = Column(DateTime)",
+            "description": "Comments on blog posts by users.",
+            "name": "Comment"
+        },
+        {
+            "classname": "Tag",
+            "code": "class Tag(Base):\n    __tablename__ = \"tag\"\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String)",
+            "description": "Tags for labeling content.",
+            "name": "Tag"
+        },
+        {
+            "classname": "PostTag",
+            "code": "class PostTag(Base):\n    __tablename__ = \"post_tag\"\n\n    id = Column(Integer, primary_key=True)\n    post_id = Column(Integer, ForeignKey(\"post.id\"))\n    tag_id = Column(Integer, ForeignKey(\"tag.id\"))",
+            "description": "Association table for many-to-many relationship between posts and tags.",
+            "name": "PostTag"
+        },
+        {
+            "classname": "Like",
+            "code": "class Like(Base):\n    __tablename__ = \"like\"\n\n    id = Column(Integer, primary_key=True)\n    post_id = Column(Integer, ForeignKey(\"post.id\"))\n    user_id = Column(Integer, ForeignKey(\"user.id\"))\n    created_at = Column(DateTime)",
+            "description": "Tracks likes on posts by users.",
+            "name": "Like"
+        },
+        {
+            "classname": "Settings",
+            "code": "class Settings(Base):\n    __tablename__ = \"settings\"\n\n    id = Column(Integer, primary_key=True)\n    user_id = Column(Integer, ForeignKey(\"user.id\"))\n    receive_emails = Column(Boolean)\n    language = Column(String)",
+            "description": "User-specific settings configuration.",
+            "name": "Settings"
+        },
+        {
+            "classname": "Notification",
+            "code": "class Notification(Base):\n    __tablename__ = \"notification\"\n\n    id = Column(Integer, primary_key=True)\n    user_id = Column(Integer, ForeignKey(\"user.id\"))\n    content = Column(String)\n    is_read = Column(Boolean)\n    created_at = Column(DateTime)",
+            "description": "Notifications for user activities.",
+            "name": "Notification"
+        }
+    ],
+    "rules": [],
+    "test_data": "Sample test data rows for each table follow the described format.",
+    "test_data_rows": [
+        {
+            "test_data_row_variable": "user_1",
+            "code": "user_1 = User(username=\"john_doe\", email=\"john@example.com\", password=\"securepassword\", date_joined=date(2023, 1, 1))"
+        },
+        {
+            "test_data_row_variable": "user_2",
+            "code": "user_2 = User(username=\"jane_doe\", email=\"jane@example.com\", password=\"anotherpassword\", date_joined=date(2023, 2, 2))"
+        },
+        {
+            "test_data_row_variable": "user_3",
+            "code": "user_3 = User(username=\"alice\", email=\"alice@example.com\", password=\"yetanotherpassword\", date_joined=date(2023, 3, 3))"
+        },
+        {
+            "test_data_row_variable": "user_4",
+            "code": "user_4 = User(username=\"bob\", email=\"bob@example.com\", password=\"password123\", date_joined=date(2023, 4, 4))"
+        },
+        {
+            "test_data_row_variable": "profile_1",
+            "code": "profile_1 = Profile(user_id=1, first_name=\"John\", last_name=\"Doe\", bio=\"Software Developer\", profile_pic_url=\"/images/john.jpg\")"
+        },
+        {
+            "test_data_row_variable": "profile_2",
+            "code": "profile_2 = Profile(user_id=2, first_name=\"Jane\", last_name=\"Doe\", bio=\"Graphic Designer\", profile_pic_url=\"/images/jane.jpg\")"
+        },
+        {
+            "test_data_row_variable": "profile_3",
+            "code": "profile_3 = Profile(user_id=3, first_name=\"Alice\", last_name=\"Smith\", bio=\"Data Scientist\", profile_pic_url=\"/images/alice.jpg\")"
+        },
+        {
+            "test_data_row_variable": "profile_4",
+            "code": "profile_4 = Profile(user_id=4, first_name=\"Bob\", last_name=\"Johnson\", bio=\"Product Manager\", profile_pic_url=\"/images/bob.jpg\")"
+        },
+        {
+            "test_data_row_variable": "category_1",
+            "code": "category_1 = Category(name=\"Technology\", description=\"All about the latest in technology.\")"
+        },
+        {
+            "test_data_row_variable": "category_2",
+            "code": "category_2 = Category(name=\"Art\", description=\"Inspiring art from around the world.\")"
+        },
+        {
+            "test_data_row_variable": "category_3",
+            "code": "category_3 = Category(name=\"Science\", description=\"Exploring scientific discoveries.\")"
+        },
+        {
+            "test_data_row_variable": "category_4",
+            "code": "category_4 = Category(name=\"Travel\", description=\"Adventures across the globe.\")"
+        },
+        {
+            "test_data_row_variable": "template_1",
+            "code": "template_1 = Template(name=\"Minimalist\", html=\"<html></html>\", css=\"body { }\n\", js=\"function() {}\")"
+        },
+        {
+            "test_data_row_variable": "template_2",
+            "code": "template_2 = Template(name=\"Modern\", html=\"<div></div>\", css=\".modern { }\n\", js=\"var x = 10;\")"
+        },
+        {
+            "test_data_row_variable": "template_3",
+            "code": "template_3 = Template(name=\"Classic\", html=\"<p></p>\", css=\".classic { }\n\", js=\"alert('Hello')\")"
+        },
+        {
+            "test_data_row_variable": "template_4",
+            "code": "template_4 = Template(name=\"Dynamic\", html=\"<span></span>\", css=\".dynamic { }\n\", js=\"function dynamic() {}\")"
+        },
+        {
+            "test_data_row_variable": "page_1",
+            "code": "page_1 = Page(title=\"Home\", content=\"<h1>Welcome</h1>\", created_at=date(2023, 1, 1), updated_at=date(2023, 1, 2))"
+        },
+        {
+            "test_data_row_variable": "page_2",
+            "code": "page_2 = Page(title=\"Contact Us\", content=\"<h1>Contact Information</h1>\", created_at=date(2023, 1, 2), updated_at=date(2023, 1, 3))"
+        },
+        {
+            "test_data_row_variable": "page_3",
+            "code": "page_3 = Page(title=\"About\", content=\"<h1>About Us</h1>\", created_at=date(2023, 1, 3), updated_at=date(2023, 1, 4))"
+        },
+        {
+            "test_data_row_variable": "page_4",
+            "code": "page_4 = Page(title=\"Services\", content=\"<h1>Our Services</h1>\", created_at=date(2023, 1, 4), updated_at=date(2023, 1, 5))"
+        },
+        {
+            "test_data_row_variable": "post_1",
+            "code": "post_1 = Post(title=\"Intro to SQLAlchemy\", content=\"How to use SQLAlchemy as ORM in Python.\", author_id=1, created_at=date(2023, 1, 1))"
+        },
+        {
+            "test_data_row_variable": "post_2",
+            "code": "post_2 = Post(title=\"Benefits of Remote Work\", content=\"Exploring the advantages of working remotely.\", author_id=2, created_at=date(2023, 2, 1))"
+        },
+        {
+            "test_data_row_variable": "post_3",
+            "code": "post_3 = Post(title=\"The Future of AI\", content=\"Understanding AI advancements.\", author_id=3, created_at=date(2023, 3, 1))"
+        },
+        {
+            "test_data_row_variable": "post_4",
+            "code": "post_4 = Post(title=\"Gardening Tips\", content=\"How to start a successful garden.\", author_id=4, created_at=date(2023, 4, 1))"
+        },
+        {
+            "test_data_row_variable": "comment_1",
+            "code": "comment_1 = Comment(content=\"Great introduction!\", post_id=1, author_id=2, created_at=date(2023, 1, 2))"
+        },
+        {
+            "test_data_row_variable": "comment_2",
+            "code": "comment_2 = Comment(content=\"Totally agree with this.\", post_id=2, author_id=3, created_at=date(2023, 2, 10))"
+        },
+        {
+            "test_data_row_variable": "comment_3",
+            "code": "comment_3 = Comment(content=\"Well written article.\", post_id=3, author_id=1, created_at=date(2023, 3, 15))"
+        },
+        {
+            "test_data_row_variable": "comment_4",
+            "code": "comment_4 = Comment(content=\"Useful tips.\", post_id=4, author_id=4, created_at=date(2023, 4, 20))"
+        },
+        {
+            "test_data_row_variable": "tag_1",
+            "code": "tag_1 = Tag(name=\"Python\")"
+        },
+        {
+            "test_data_row_variable": "tag_2",
+            "code": "tag_2 = Tag(name=\"Remote Work\")"
+        },
+        {
+            "test_data_row_variable": "tag_3",
+            "code": "tag_3 = Tag(name=\"AI\")"
+        },
+        {
+            "test_data_row_variable": "tag_4",
+            "code": "tag_4 = Tag(name=\"Gardening\")"
+        },
+        {
+            "test_data_row_variable": "post_tag_1",
+            "code": "post_tag_1 = PostTag(post_id=1, tag_id=1)"
+        },
+        {
+            "test_data_row_variable": "post_tag_2",
+            "code": "post_tag_2 = PostTag(post_id=2, tag_id=2)"
+        },
+        {
+            "test_data_row_variable": "post_tag_3",
+            "code": "post_tag_3 = PostTag(post_id=3, tag_id=3)"
+        },
+        {
+            "test_data_row_variable": "post_tag_4",
+            "code": "post_tag_4 = PostTag(post_id=4, tag_id=4)"
+        },
+        {
+            "test_data_row_variable": "like_1",
+            "code": "like_1 = Like(post_id=1, user_id=3, created_at=date(2023, 1, 3))"
+        },
+        {
+            "test_data_row_variable": "like_2",
+            "code": "like_2 = Like(post_id=2, user_id=4, created_at=date(2023, 2, 12))"
+        },
+        {
+            "test_data_row_variable": "like_3",
+            "code": "like_3 = Like(post_id=3, user_id=1, created_at=date(2023, 3, 16))"
+        },
+        {
+            "test_data_row_variable": "like_4",
+            "code": "like_4 = Like(post_id=4, user_id=2, created_at=date(2023, 4, 21))"
+        },
+        {
+            "test_data_row_variable": "settings_1",
+            "code": "settings_1 = Settings(user_id=1, receive_emails=True, language=\"en\")"
+        },
+        {
+            "test_data_row_variable": "settings_2",
+            "code": "settings_2 = Settings(user_id=2, receive_emails=False, language=\"fr\")"
+        },
+        {
+            "test_data_row_variable": "settings_3",
+            "code": "settings_3 = Settings(user_id=3, receive_emails=True, language=\"es\")"
+        },
+        {
+            "test_data_row_variable": "settings_4",
+            "code": "settings_4 = Settings(user_id=4, receive_emails=False, language=\"de\")"
+        },
+        {
+            "test_data_row_variable": "notification_1",
+            "code": "notification_1 = Notification(user_id=1, content=\"You have a new comment.\", is_read=False, created_at=date(2023, 1, 4))"
+        },
+        {
+            "test_data_row_variable": "notification_2",
+            "code": "notification_2 = Notification(user_id=2, content=\"Your post was liked.\", is_read=False, created_at=date(2023, 2, 13))"
+        },
+        {
+            "test_data_row_variable": "notification_3",
+            "code": "notification_3 = Notification(user_id=3, content=\"Profile updated successfully.\", is_read=True, created_at=date(2023, 3, 17))"
+        },
+        {
+            "test_data_row_variable": "notification_4",
+            "code": "notification_4 = Notification(user_id=4, content=\"New message received.\", is_read=False, created_at=date(2023, 4, 22))"
+        }
+    ],
+    "test_data_sqlite": "Test data will be generated in separate rows, matching the models.",
+    "name": "ModernWebApp"
+}

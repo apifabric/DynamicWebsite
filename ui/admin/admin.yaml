@@ -1,0 +1,332 @@
+about:
+  date: January 27, 2025 15:41:50
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 10
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Audit:
+    attributes:
+    - label: ' entity_name*'
+      name: entity_name
+      required: true
+      search: true
+      sort: true
+    - name: action
+      required: true
+    - name: timestamp
+      type: DATETIME
+    - name: id
+    - name: entity_id
+    description: Tracks changes made to different entities for audit purposes.
+    info_list: Tracks changes made to different entities for audit purposes.
+    type: Audit
+    user_key: entity_name
+  Component:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: css_class
+    - name: id
+    description: Defines different reusable components that can be placed within web
+      pages.
+    info_list: Defines different reusable components that can be placed within web
+      pages.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - component_id
+      name: ComponentStyleList
+      resource: ComponentStyle
+    - direction: tomany
+      fks:
+      - component_id
+      name: PageComponentList
+      resource: PageComponent
+    type: Component
+    user_key: name
+  ComponentStyle:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: component_id
+    - name: style_id
+    description: Join table for association between components and their styles.
+    info_list: Join table for association between components and their styles.
+    tab_groups:
+    - direction: toone
+      fks:
+      - component_id
+      name: component
+      resource: Component
+    - direction: toone
+      fks:
+      - style_id
+      name: style
+      resource: Style
+    type: ComponentStyle
+    user_key: id
+  Menu:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: page_id
+    - name: parent_id
+    - name: title
+      required: true
+    description: Represents navigational menus and their hierarchy.
+    info_list: Represents navigational menus and their hierarchy.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - parent_id
+      name: MenuList
+      resource: Menu
+    - direction: toone
+      fks:
+      - page_id
+      name: page
+      resource: Page
+    - direction: toone
+      fks:
+      - parent_id
+      name: parent_
+      resource: Menu
+    type: Menu
+    user_key: id
+  Page:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: title
+      required: true
+    - name: content
+    - name: created_at
+      type: DATETIME
+    - name: updated_at
+      type: DATETIME
+    description: Stores the different web pages, including their titles and content.
+    info_list: Stores the different web pages, including their titles and content.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - page_id
+      name: MenuList
+      resource: Menu
+    - direction: tomany
+      fks:
+      - page_id
+      name: PageComponentList
+      resource: PageComponent
+    - direction: tomany
+      fks:
+      - page_id
+      name: PageScriptList
+      resource: PageScript
+    type: Page
+    user_key: id
+  PageComponent:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: component_id
+    - name: page_id
+    - name: order
+    description: Join table representing many-to-many relationship between pages and
+      components, with order on the page.
+    info_list: Join table representing many-to-many relationship between pages and
+      components, with order on the page.
+    tab_groups:
+    - direction: toone
+      fks:
+      - component_id
+      name: component
+      resource: Component
+    - direction: toone
+      fks:
+      - page_id
+      name: page
+      resource: Page
+    type: PageComponent
+    user_key: id
+  PageScript:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: page_id
+    - name: script_id
+    description: Join table for association between pages and scripts utilized on
+      them.
+    info_list: Join table for association between pages and scripts utilized on them.
+    tab_groups:
+    - direction: toone
+      fks:
+      - page_id
+      name: page
+      resource: Page
+    - direction: toone
+      fks:
+      - script_id
+      name: script
+      resource: Script
+    type: PageScript
+    user_key: id
+  Role:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: id
+    description: Defines different roles for access and management functions within
+      the website.
+    info_list: Defines different roles for access and management functions within
+      the website.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - role_id
+      name: UserRoleList
+      resource: UserRole
+    type: Role
+    user_key: name
+  Script:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: code
+      required: true
+    - name: id
+    description: Stores JavaScript blocks or files that enhance interactivity.
+    info_list: Stores JavaScript blocks or files that enhance interactivity.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - script_id
+      name: PageScriptList
+      resource: PageScript
+    type: Script
+    user_key: name
+  Style:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: css
+      required: true
+    - name: id
+    description: Stores different styles that can be applied to components.
+    info_list: Stores different styles that can be applied to components.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - style_id
+      name: ComponentStyleList
+      resource: ComponentStyle
+    type: Style
+    user_key: name
+  User:
+    attributes:
+    - label: ' username*'
+      name: username
+      required: true
+      search: true
+      sort: true
+    - name: email
+      required: true
+    - name: password_hash
+      required: true
+    - name: created_at
+      type: DATETIME
+    - name: id
+    description: A model representing users of the website, storing basic and essential
+      information for account identification.
+    info_list: A model representing users of the website, storing basic and essential
+      information for account identification.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - user_id
+      name: UserRoleList
+      resource: UserRole
+    type: User
+    user_key: username
+  UserRole:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: role_id
+    - name: user_id
+    description: Join table to represent many-to-many relationship between users and
+      roles.
+    info_list: Join table to represent many-to-many relationship between users and
+      roles.
+    tab_groups:
+    - direction: toone
+      fks:
+      - role_id
+      name: role
+      resource: Role
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: UserRole
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

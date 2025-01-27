@@ -1,0 +1,113 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Audit: Tracks changes made to different entities for audit purposes.
+Component: Defines different reusable components that can be placed within web pages.
+ComponentStyle: Join table for association between components and their styles.
+Style: Stores different styles that can be applied to components.
+Menu: Represents navigational menus and their hierarchy.
+Page: Stores the different web pages, including their titles and content.
+PageComponent: Join table representing many-to-many relationship between pages and components, with order on the page.
+PageScript: Join table for association between pages and scripts utilized on them.
+Script: Stores JavaScript blocks or files that enhance interactivity.
+Role: Defines different roles for access and management functions within the website.
+User: A model representing users of the website, storing basic and essential information for account identification.
+UserRole: Join table to represent many-to-many relationship between users and roles.
+'''
+}
+
+Table Audit {
+    id INTEGER [primary key]
+    entity_name VARCHAR 
+    entity_id INTEGER 
+    action VARCHAR 
+    timestamp DATETIME 
+    }
+
+Table Component {
+    id INTEGER [primary key]
+    name VARCHAR 
+    css_class VARCHAR 
+    }
+
+Table ComponentStyle {
+    id INTEGER [primary key]
+    component_id INTEGER 
+    style_id INTEGER 
+    }
+
+Table Style {
+    id INTEGER [primary key]
+    name VARCHAR 
+    css TEXT 
+    }
+
+Table Menu {
+    id INTEGER [primary key]
+    title VARCHAR 
+    parent_id INTEGER 
+    page_id INTEGER 
+    }
+
+Table Page {
+    id INTEGER [primary key]
+    title VARCHAR 
+    content TEXT 
+    created_at DATETIME 
+    updated_at DATETIME 
+    }
+
+Table PageComponent {
+    id INTEGER [primary key]
+    page_id INTEGER 
+    component_id INTEGER 
+    order INTEGER 
+    }
+
+Table PageScript {
+    id INTEGER [primary key]
+    page_id INTEGER 
+    script_id INTEGER 
+    }
+
+Table Script {
+    id INTEGER [primary key]
+    name VARCHAR 
+    code TEXT 
+    }
+
+Table Role {
+    id INTEGER [primary key]
+    name VARCHAR 
+    }
+
+Table User {
+    id INTEGER [primary key]
+    username VARCHAR 
+    email VARCHAR 
+    password_hash VARCHAR 
+    created_at DATETIME 
+    }
+
+Table UserRole {
+    id INTEGER [primary key]
+    user_id INTEGER 
+    role_id INTEGER 
+    }
+
+
+
+// Relationships
+    Ref: ComponentStyle.(component_id) < Component.(id)
+    Ref: ComponentStyle.(style_id) < Style.(id)
+    Ref: Menu.(page_id) < Page.(id)
+    Ref: Menu.(parent_id) < Menu.(id)
+    Ref: PageComponent.(component_id) < Component.(id)
+    Ref: PageComponent.(page_id) < Page.(id)
+    Ref: PageScript.(page_id) < Page.(id)
+    Ref: PageScript.(script_id) < Script.(id)
+    Ref: UserRole.(role_id) < Role.(id)
+    Ref: UserRole.(user_id) < User.(id)
