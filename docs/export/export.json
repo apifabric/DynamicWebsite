@@ -1,0 +1,74 @@
+{
+    "rules": [
+        {
+            "name": "PageComponentOrder",
+            "description": "Ensures that the order of components within a page is properly handled when associated.",
+            "use_case": "General",
+            "code": "Order calculated by insertion order",
+            "error": null,
+            "status": "accepted",
+            "entity": "PageComponent",
+            "id": "01JJM6TMMMD788ZAK5T8DJSYND"
+        },
+        {
+            "name": "AuditTrail",
+            "description": "Automatically records the action and timestamp each time an entity save is done.",
+            "use_case": "General",
+            "code": "Record operations on entity actions",
+            "error": null,
+            "status": "accepted",
+            "entity": "Audit",
+            "id": "01JJM6TMN47W3FYDF9YTGQ2RYK"
+        }
+    ],
+    "models": [
+        {
+            "classname": "Audit",
+            "code": "class Audit(Base):  # type: ignore\n    \"\"\"\n    description: Tracks changes made to different entities for audit purposes.\n    \"\"\"\n    __tablename__ = 'audits'\n    _s_collection_name = 'Audit'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    entity_name = Column(String, nullable=False)\n    entity_id = Column(Integer)\n    action = Column(String, nullable=False)\n    timestamp = Column(DateTime)"
+        },
+        {
+            "classname": "Component",
+            "code": "class Component(Base):  # type: ignore\n    \"\"\"\n    description: Defines different reusable components that can be placed within web pages.\n    \"\"\"\n    __tablename__ = 'components'\n    _s_collection_name = 'Component'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    css_class = Column(String)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    ComponentStyleList : Mapped[List[\"ComponentStyle\"]] = relationship(back_populates=\"component\")\n    PageComponentList : Mapped[List[\"PageComponent\"]] = relationship(back_populates=\"component\")"
+        },
+        {
+            "classname": "Page",
+            "code": "class Page(Base):  # type: ignore\n    \"\"\"\n    description: Stores the different web pages, including their titles and content.\n    \"\"\"\n    __tablename__ = 'pages'\n    _s_collection_name = 'Page'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    title = Column(String, nullable=False)\n    content = Column(Text)\n    created_at = Column(DateTime)\n    updated_at = Column(DateTime)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    MenuList : Mapped[List[\"Menu\"]] = relationship(back_populates=\"page\")\n    PageComponentList : Mapped[List[\"PageComponent\"]] = relationship(back_populates=\"page\")\n    PageScriptList : Mapped[List[\"PageScript\"]] = relationship(back_populates=\"page\")"
+        },
+        {
+            "classname": "Role",
+            "code": "class Role(Base):  # type: ignore\n    \"\"\"\n    description: Defines different roles for access and management functions within the website.\n    \"\"\"\n    __tablename__ = 'roles'\n    _s_collection_name = 'Role'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    UserRoleList : Mapped[List[\"UserRole\"]] = relationship(back_populates=\"role\")"
+        },
+        {
+            "classname": "Script",
+            "code": "class Script(Base):  # type: ignore\n    \"\"\"\n    description: Stores JavaScript blocks or files that enhance interactivity.\n    \"\"\"\n    __tablename__ = 'scripts'\n    _s_collection_name = 'Script'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    code = Column(Text, nullable=False)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    PageScriptList : Mapped[List[\"PageScript\"]] = relationship(back_populates=\"script\")"
+        },
+        {
+            "classname": "Style",
+            "code": "class Style(Base):  # type: ignore\n    \"\"\"\n    description: Stores different styles that can be applied to components.\n    \"\"\"\n    __tablename__ = 'styles'\n    _s_collection_name = 'Style'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    css = Column(Text, nullable=False)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    ComponentStyleList : Mapped[List[\"ComponentStyle\"]] = relationship(back_populates=\"style\")"
+        },
+        {
+            "classname": "User",
+            "code": "class User(Base):  # type: ignore\n    \"\"\"\n    description: A model representing users of the website, storing basic and essential information for account identification.\n    \"\"\"\n    __tablename__ = 'users'\n    _s_collection_name = 'User'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    username = Column(String, nullable=False)\n    email = Column(String, nullable=False)\n    password_hash = Column(String, nullable=False)\n    created_at = Column(DateTime)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    UserRoleList : Mapped[List[\"UserRole\"]] = relationship(back_populates=\"user\")"
+        },
+        {
+            "classname": "ComponentStyle",
+            "code": "class ComponentStyle(Base):  # type: ignore\n    \"\"\"\n    description: Join table for association between components and their styles.\n    \"\"\"\n    __tablename__ = 'component_styles'\n    _s_collection_name = 'ComponentStyle'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    component_id = Column(ForeignKey('components.id'))\n    style_id = Column(ForeignKey('styles.id'))\n\n    # parent relationships (access parent)\n    component : Mapped[\"Component\"] = relationship(back_populates=(\"ComponentStyleList\"))\n    style : Mapped[\"Style\"] = relationship(back_populates=(\"ComponentStyleList\"))"
+        },
+        {
+            "classname": "Menu",
+            "code": "class Menu(Base):  # type: ignore\n    \"\"\"\n    description: Represents navigational menus and their hierarchy.\n    \"\"\"\n    __tablename__ = 'menus'\n    _s_collection_name = 'Menu'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    title = Column(String, nullable=False)\n    parent_id = Column(ForeignKey('menus.id'))\n    page_id = Column(ForeignKey('pages.id'))\n\n    # parent relationships (access parent)\n    page : Mapped[\"Page\"] = relationship(back_populates=(\"MenuList\"))\n    parent_ : Mapped[\"Menu\"] = relationship(remote_side=[id], back_populates=(\"MenuList\"))\n\n    # child relationships (access children)\n    MenuList : Mapped[List[\"Menu\"]] = relationship(back_populates=\"parent_\")"
+        },
+        {
+            "classname": "PageComponent",
+            "code": "class PageComponent(Base):  # type: ignore\n    \"\"\"\n    description: Join table representing many-to-many relationship between pages and components, with order on the page.\n    \"\"\"\n    __tablename__ = 'page_components'\n    _s_collection_name = 'PageComponent'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    page_id = Column(ForeignKey('pages.id'))\n    component_id = Column(ForeignKey('components.id'))\n    order = Column(Integer)\n\n    # parent relationships (access parent)\n    component : Mapped[\"Component\"] = relationship(back_populates=(\"PageComponentList\"))\n    page : Mapped[\"Page\"] = relationship(back_populates=(\"PageComponentList\"))"
+        },
+        {
+            "classname": "PageScript",
+            "code": "class PageScript(Base):  # type: ignore\n    \"\"\"\n    description: Join table for association between pages and scripts utilized on them.\n    \"\"\"\n    __tablename__ = 'page_scripts'\n    _s_collection_name = 'PageScript'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    page_id = Column(ForeignKey('pages.id'))\n    script_id = Column(ForeignKey('scripts.id'))\n\n    # parent relationships (access parent)\n    page : Mapped[\"Page\"] = relationship(back_populates=(\"PageScriptList\"))\n    script : Mapped[\"Script\"] = relationship(back_populates=(\"PageScriptList\"))"
+        },
+        {
+            "classname": "UserRole",
+            "code": "class UserRole(Base):  # type: ignore\n    \"\"\"\n    description: Join table to represent many-to-many relationship between users and roles.\n    \"\"\"\n    __tablename__ = 'user_roles'\n    _s_collection_name = 'UserRole'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    user_id = Column(ForeignKey('users.id'))\n    role_id = Column(ForeignKey('roles.id'))\n\n    # parent relationships (access parent)\n    role : Mapped[\"Role\"] = relationship(back_populates=(\"UserRoleList\"))\n    user : Mapped[\"User\"] = relationship(back_populates=(\"UserRoleList\"))"
+        }
+    ]
+}

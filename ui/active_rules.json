@@ -1,0 +1,22 @@
+[
+    {
+        "name": "PageComponentOrder",
+        "description": "Ensures that the order of components within a page is properly handled when associated.",
+        "use_case": "General",
+        "code": "Order calculated by insertion order",
+        "error": null,
+        "status": "accepted",
+        "entity": "PageComponent",
+        "id": "01JJM6TMMMD788ZAK5T8DJSYND"
+    },
+    {
+        "name": "AuditTrail",
+        "description": "Automatically records the action and timestamp each time an entity save is done.",
+        "use_case": "General",
+        "code": "Record operations on entity actions",
+        "error": null,
+        "status": "accepted",
+        "entity": "Audit",
+        "id": "01JJM6TMN47W3FYDF9YTGQ2RYK"
+    }
+]
